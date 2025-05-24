@@ -1,0 +1,17 @@
+@import 'fonts/chinese-take-away.scss';
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: yellow;
+}
+
+.container {
+    max-width: 1800px;
+    width: 100%;
+    margin: 0 auto;
+    .row {
+        margin: 0 auto;
+    }
+}

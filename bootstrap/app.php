@@ -3,6 +3,11 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+use Spatie\Permission\Middleware\RoleMiddleware;
+use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -11,8 +16,18 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->alias([
+            'role' => RoleMiddleware::class,
+            'permission' => PermissionMiddleware::class,
+            'role_or_permission' => RoleOrPermissionMiddleware::class,
+            'RedirectIfAuthenticated' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->render(function (NotFoundHttpException $e) {
+            return redirect()->route('home.index');
+        });
+        $exceptions->render(function (RouteNotFoundException $e) {
+            return response()->json(['error' => 'Route not found'], 404);
+        });
     })->create();

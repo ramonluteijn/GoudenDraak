@@ -1,0 +1,29 @@
+version: "3.1"
+
+services:
+  dbhost:
+    container_name: acc_goudendraak
+    image: mysql:5.7
+    restart: on-failure
+    ports:
+      - "3310:3306"
+    environment:
+      MYSQL_DATABASE: acc_goudendraak
+      MYSQL_USER: acc_goudendraak
+      MYSQL_PASSWORD: acc_goudendraak
+      MYSQL_ROOT_PASSWORD: acc_goudendraak
+    volumes:
+      - ./initdb.d:/docker-entrypoint-initdb.d:ro
+  # Redis Server for Cache
+  redis-cache:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - cache:/data
+
+volumes:
+  cache:
+    driver: local
