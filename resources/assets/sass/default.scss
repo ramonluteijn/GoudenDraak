@@ -5,6 +5,15 @@
     padding: 0;
     box-sizing: border-box;
     color: yellow;
+    font-family: 'Times New Roman', serif;
+}
+
+body {
+    background-color: darkred;
+    main {
+        background-color: red;
+        margin: 15px 50px;
+    }
 }
 
 .container {

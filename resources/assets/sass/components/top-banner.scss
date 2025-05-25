@@ -1,12 +1,13 @@
 .top-banner {
     text-align: center;
     font-size: 30px;
-    font-family: 'ChineseTakeaway', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
     .col-3 {
         display: flex;
         align-items: center;
         justify-content: center;
+        font-family: 'ChineseTakeaway', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
     }
     img {
         max-height: 50px;

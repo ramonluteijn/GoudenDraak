@@ -19,10 +19,11 @@
       }
   @endphp
   <body class="{{$className}}">
-  <x-blocks.top-banner />
-    <x-blocks.hero />
     <main>
-      @yield("content")
+        <x-blocks.top-banner />
+        <x-blocks.hero />
+        @yield("content")
+        <x-blocks.footer />
     </main>
 
 
