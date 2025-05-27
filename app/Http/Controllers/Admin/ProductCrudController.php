@@ -39,12 +39,7 @@ class ProductCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb();
-
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
+        $this->setupColumns();
     }
 
     /**
@@ -56,12 +51,7 @@ class ProductCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(ProductRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
-
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
+        $this->setupFields();
     }
 
     /**
@@ -73,5 +63,33 @@ class ProductCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    /**
+     * Define what happens when the Show operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-show
+     * @return void
+     */
+    protected function setupShowOperation()
+    {
+        $this->setupColumns();
+    }
+
+    private function setupColumns()
+    {
+        CRUD::column('id')->label('Productnummer')->type('text');
+        CRUD::column('name')->label('Product naam')->type('text');
+        CRUD::column('price')->label('Prijs')->type('number')->decimals(2)->prefix('€ ');
+        CRUD::column('stock')->label('Voorraad')->type('number');
+        CRUD::column('type')->label('Categorie');
+    }
+
+    private function setupFields()
+    {
+        CRUD::field('name')->label('Product naam')->type('text');
+        CRUD::field('price')->label('Prijs')->type('number')->decimals(2)->prefix('€ ');
+        CRUD::field('stock')->label('Voorraad')->type('number');
+        CRUD::field('type')->label('Categorie');
     }
 }
