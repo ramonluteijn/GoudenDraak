@@ -16,5 +16,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
         ]);
+
+        User::insert([
+                'name' => 'Admin',
+                'email' => 'admin@goudendraak.nl',
+                'password' => bcrypt('test1234'),
+        ]);
+
+        User::find(1)->assignRole('admin');
     }
 }
