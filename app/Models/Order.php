@@ -5,8 +5,9 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Product extends Model
+class Order extends Model
 {
     use CrudTrait;
     use HasFactory;
@@ -17,23 +18,11 @@ class Product extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'products';
+    protected $table = 'orders';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-     protected $fillable = [
-        'name',
-        'description',
-        'price',
-        'stock',
-        'type',
-    ];
-
-     protected $casts = [
-        'price' => 'decimal:2',
-        'stock' => 'integer',
-    ];
-
+    // protected $fillable = [];
     // protected $hidden = [];
 
     /*
@@ -48,10 +37,15 @@ class Product extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function orders()
+    public function table()
     {
-        return $this->belongsToMany(Order::class, 'order_details')->withPivot('order_id');
+        return $this->belongsTo(Table::class, 'table_id');
     }
+
+    public function products() : BelongsToMany {
+        return $this->belongsToMany(Product::class, 'order_details')->withPivot('product_id');
+    }
+
 
     /*
     |--------------------------------------------------------------------------
