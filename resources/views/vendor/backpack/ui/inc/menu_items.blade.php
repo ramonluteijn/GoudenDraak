@@ -5,3 +5,4 @@
 <x-backpack::menu-item title="Tables" icon="la la-question" :link="backpack_url('table')" />
 
 <x-backpack::menu-item title="Orders" icon="la la-question" :link="backpack_url('order')" />
+<x-backpack::menu-item title="Questions" icon="la la-question" :link="backpack_url('question')" />
