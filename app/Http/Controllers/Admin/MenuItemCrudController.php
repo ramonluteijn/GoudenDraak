@@ -39,7 +39,7 @@ class MenuItemCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        $this->setupFieldsForShow();
 
         /**
          * Columns can be defined using the fluent syntax:
@@ -76,12 +76,34 @@ class MenuItemCrudController extends CrudController
 
     private function setupFields()
     {
-        CRUD::field('title')->label('Menu Item Titel');
+        CRUD::field('name')->label('Menu Item Titel');
         CRUD::field([
             'name'    => 'url',
-            'label'   => 'URL',
+            'label'   => 'Pagina',
             'type'    => 'select_from_array',
-            'options' => (new \App\Services\RouteService())->getMenuItemRouteOptions(),
+            'options' => (new \App\Services\RouteService())->getRouteOptions(),
+        ]);
+    }
+
+    /**
+     * Define what happens when the Show operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-show
+     * @return void
+     */
+    protected function setupShowOperation()
+    {
+        $this->setupFieldsForShow();
+    }
+
+    private function setupFieldsForShow()
+    {
+        CRUD::column('name')->label('Menu Item Titel');
+        CRUD::column([
+            'name' => 'url',
+            'label' => 'Pagina',
+            'type' => 'select_from_array',
+            'options' => (new \App\Services\RouteService())->getRouteOptions(),
         ]);
     }
 }
