@@ -25,7 +25,7 @@ class QuestionRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'question' => 'required|string|max:1000',
         ];
     }
 
@@ -49,7 +49,9 @@ class QuestionRequest extends FormRequest
     public function messages()
     {
         return [
-            //
+            'question.required' => 'De vraag is verplicht.',
+            'question.string' => 'De vraag moet een geldige tekst zijn.',
+            'question.max' => 'De vraag mag niet langer zijn dan 1000 tekens.',
         ];
     }
 }

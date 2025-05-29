@@ -29,7 +29,7 @@ class ProductRequest extends FormRequest
             'description' => 'nullable|string|max:1000',
             'price' => 'required|numeric|min:0|max:999999.99',
             'stock' => 'required|integer|min:0|max:2147483647',
-            'type' => 'required'
+            'category_id' => 'required',
         ];
     }
 
@@ -65,7 +65,7 @@ class ProductRequest extends FormRequest
             'stock.integer' => 'De voorraad moet een geldig geheel getal zijn.',
             'stock.min' => 'De voorraad moet minimaal 0 zijn.',
             'stock.max' => 'De voorraad mag niet hoger zijn dan 2147483647.',
-            'type.required' => 'Het type product is verplicht.',
+            'category_id.required' => 'De categorie is verplicht.',
         ];
     }
 }

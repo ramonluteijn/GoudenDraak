@@ -6,7 +6,7 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class Category extends Model
 {
     use CrudTrait;
     use HasFactory;
@@ -17,23 +17,13 @@ class Product extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'products';
+    protected $table = 'categories';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
      protected $fillable = [
-        'name',
-        'description',
-        'price',
-        'stock',
-        'category_id',
-    ];
-
-     protected $casts = [
-        'price' => 'decimal:2',
-        'stock' => 'integer',
-    ];
-
+         'name',
+     ];
     // protected $hidden = [];
 
     /*
@@ -48,15 +38,11 @@ class Product extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function orders()
+    public function products()
     {
-        return $this->belongsToMany(Order::class, 'order_details')->withPivot('order_id');
+        return $this->hasMany(Product::class, 'category_id');
     }
 
-    public function category()
-    {
-        return $this->belongsTo(Category::class, 'category_id');
-    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES

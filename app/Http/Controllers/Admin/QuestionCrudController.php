@@ -28,7 +28,7 @@ class QuestionCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Question::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/question');
-        CRUD::setEntityNameStrings('question', 'questions');
+        CRUD::setEntityNameStrings('vraag', 'vragen');
     }
 
     /**
@@ -39,17 +39,12 @@ class QuestionCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        CRUD::column('question')->label('Vraag')->type('text')->limit(50);
         Crud::addColumn([
             'name' => 'answers',
-            'label' => 'Answers Count',
+            'label' => 'Aantal Antwoorden',
             'type' => 'relationship_count',
         ]);
-
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
     }
 
     /**
@@ -61,12 +56,7 @@ class QuestionCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(QuestionRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
-
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
+        CRUD::field('question')->label('Vraag')->type('text');
     }
 
     /**
@@ -88,19 +78,15 @@ class QuestionCrudController extends CrudController
      */
     protected function setupShowOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        $this->setupListOperation();
         CRUD::addColumn([
             'name' => 'answers_list',
-            'label' => 'Answers',
+            'label' => 'Antwoorden',
             'type' => 'custom_html',
             'value' => function ($entry) {
                 return $entry->answers->pluck('answer')->implode('<hr>');
             },
         ]);
 
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
     }
 }

@@ -28,7 +28,7 @@ class TableCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Table::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/table');
-        CRUD::setEntityNameStrings('table', 'tables');
+        CRUD::setEntityNameStrings('tafel', 'tafels');
     }
 
     /**
@@ -39,15 +39,8 @@ class TableCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-//        CRUD::setFromDb(); // set columns from db columns.
         CRUD::column('id')->label('Tafel nummer');
         CRUD::column('capacity')->label('Aantal plaatsen');
-
-
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
     }
 
     /**
@@ -59,12 +52,7 @@ class TableCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(TableRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
-
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
+        CRUD::field('capacity')->label('Aantal plaatsen')->type('number');
     }
 
     /**
@@ -75,6 +63,18 @@ class TableCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+        CRUD::field('id')->type('number')->label('Tafel nummer')->attributes(['readonly' => 'readonly', 'class' => 'bg-gray-100 form-control']);
         $this->setupCreateOperation();
+    }
+
+    /**
+     * Define what happens when the Show operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-show
+     * @return void
+     */
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
     }
 }

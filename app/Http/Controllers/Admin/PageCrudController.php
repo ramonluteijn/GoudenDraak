@@ -28,7 +28,7 @@ class PageCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Page::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/page');
-        CRUD::setEntityNameStrings('page', 'pages');
+        CRUD::setEntityNameStrings('pagina', 'pagina\'s');
     }
 
     /**
@@ -39,12 +39,9 @@ class PageCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
-
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
+        CRUD::column('title')->label('Pagina Titel');
+        CRUD::column('created_at')->label('Aangemaakt op')->type('datetime');
+        CRUD::column('updated_at')->label('Laatst aangepast op')->type('datetime');
     }
 
     /**
@@ -57,11 +54,6 @@ class PageCrudController extends CrudController
     {
         CRUD::setValidation(PageRequest::class);
         $this->setupFields();
-
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
     }
 
     /**
@@ -75,10 +67,26 @@ class PageCrudController extends CrudController
         $this->setupCreateOperation();
     }
 
+    /**
+     * Define what happens when the Show operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-show
+     * @return void
+     */
+    protected function setupShowOperation()
+    {
+        CRUD::column('title')->label('Pagina Titel');
+        CRUD::column('url')->label('URL');
+        CRUD::column('content')->label('Pagina Content')->type('summernote');
+        CRUD::column('created_at')->label('Aangemaakt op')->type('datetime');
+        CRUD::column('updated_at')->label('Laatst aangepast op')->type('datetime');
+
+    }
+
     private function setupFields()
     {
         CRUD::field('title')->label('Pagina Titel')->type('text')->attributes(['placeholder' => 'Voeg hier de titel van de pagina toe']);
         CRUD::field('url')->label('URL')->type('text')->attributes(['placeholder' => 'Voeg hier de URL van de pagina toe, bijvoorbeeld: over-ons']);
-        CRUD::field('content')->type('summernote')->label('Page Content');
+        CRUD::field('content')->type('summernote')->label('Pagina Content');
     }
 }

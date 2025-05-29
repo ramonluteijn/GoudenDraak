@@ -39,17 +39,10 @@ class OrderCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-//        CRUD::setFromDb(); // set columns from db columns.
-
         CRUD::column('id')->type('number')->label('Ordernummer');
-        CRUD::column('table.id')->label('Tafel');
+        CRUD::column('table.id')->label('Tafel nummer');
         CRUD::column('take_away')->type('boolean')->label('Afhaal');
         CRUD::column('price')->type('decimal')->label('Prijs');
-
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
     }
 
     /**
@@ -61,19 +54,11 @@ class OrderCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(OrderRequest::class);
-//        CRUD::setFromDb(); // set fields from db columns.
-
-
         CRUD::field([
-            'label'     => "products",
+            'label'     => "Producten",
             'type'      => 'select_multiple',
             'name'      => 'products',
         ]);
-
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
     }
 
     /**
@@ -85,5 +70,27 @@ class OrderCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    /**
+     * Define what happens when the Show operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-show
+     * @return void
+     */
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
+        CRUD::addColumn([
+            'name' => 'products_list',
+            'label' => 'Producten',
+            'type' => 'custom_html',
+            'value' => function ($entry) {
+                return $entry->products->map(function ($product) {
+                    return "<span>{$product->name} - €{$product->price}</span> <br>";
+                })->implode(' ');
+            },
+        ]);
+        CRUD::column('created_at')->type('datetime')->label('Aangemaakt op');
     }
 }

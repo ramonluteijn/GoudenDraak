@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class MenuItemRequest extends FormRequest
+class CategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +26,7 @@ class MenuItemRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
-            'url' => 'required'
+             'name' => ['required','max:255', Rule::unique('categories')->ignore($this->route('id'))],
         ];
     }
 
@@ -50,9 +50,9 @@ class MenuItemRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'De naam van het menu-item is verplicht.',
+            'name.required' => 'De naam van de categorie is verplicht.',
             'name.max' => 'De naam mag maximaal 255 tekens bevatten.',
-            'url.required' => 'De URL van het menu-item is verplicht.',
+            'name.unique' => 'Deze categorie bestaat al.',
         ];
     }
 }

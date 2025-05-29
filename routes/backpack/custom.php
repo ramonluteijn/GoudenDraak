@@ -22,6 +22,7 @@ Route::group([
     Route::crud('question', 'QuestionCrudController');
     Route::crud('page', 'PageCrudController');
     Route::crud('menu-item', 'MenuItemCrudController');
+    Route::crud('category', 'CategoryCrudController');
 }); // this should be the absolute last line of this file
 
 /**

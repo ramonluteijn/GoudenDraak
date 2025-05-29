@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ProductRequest;
+use App\Models\Category;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -82,7 +83,12 @@ class ProductCrudController extends CrudController
         CRUD::column('name')->label('Product naam')->type('text');
         CRUD::column('price')->label('Prijs')->type('number')->decimals(2)->prefix('€ ');
         CRUD::column('stock')->label('Voorraad')->type('number');
-        CRUD::column('type')->label('Categorie');
+        CRUD::column([
+            'name'    => 'category_id',
+            'label'   => 'Categorie',
+            'type'    => 'select_from_array',
+            'options' => Category::all()->pluck('name', 'id')->toArray(),
+        ]);
     }
 
     private function setupFields()
@@ -90,6 +96,11 @@ class ProductCrudController extends CrudController
         CRUD::field('name')->label('Product naam')->type('text');
         CRUD::field('price')->label('Prijs')->type('number')->decimals(2)->prefix('€ ');
         CRUD::field('stock')->label('Voorraad')->type('number');
-        CRUD::field('type')->label('Categorie');
+        CRUD::field([
+            'name'    => 'category_id',
+            'label'   => 'Categorieën',
+            'type'    => 'select_from_array',
+            'options' => Category::all()->pluck('name', 'id')->toArray(),
+        ]);
     }
 }

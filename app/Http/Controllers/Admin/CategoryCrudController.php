@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\MenuItemRequest;
+use App\Http\Requests\CategoryRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class MenuItemCrudController
+ * Class CategoryCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class MenuItemCrudController extends CrudController
+class CategoryCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -26,9 +26,9 @@ class MenuItemCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\MenuItem::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/menu-item');
-        CRUD::setEntityNameStrings('menu item', 'menu items');
+        CRUD::setModel(\App\Models\Category::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/category');
+        CRUD::setEntityNameStrings('categorie', 'categorieën');
     }
 
     /**
@@ -39,7 +39,12 @@ class MenuItemCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        $this->setupFieldsForShow();
+        CRUD::column('name')->label('Categorie naam')->type('text');
+        Crud::addColumn([
+            'name' => 'products',
+            'label' => 'Producten Count',
+            'type' => 'relationship_count',
+        ]);
     }
 
     /**
@@ -50,8 +55,8 @@ class MenuItemCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(MenuItemRequest::class);
-        $this->setupFields();
+        CRUD::setValidation(CategoryRequest::class);
+        CRUD::field('name')->label('Categorie naam')->type('text');
     }
 
     /**
@@ -65,17 +70,6 @@ class MenuItemCrudController extends CrudController
         $this->setupCreateOperation();
     }
 
-    private function setupFields()
-    {
-        CRUD::field('name')->label('Menu Item Titel');
-        CRUD::field([
-            'name'    => 'url',
-            'label'   => 'Pagina',
-            'type'    => 'select_from_array',
-            'options' => (new \App\Services\RouteService())->getRouteOptions(),
-        ]);
-    }
-
     /**
      * Define what happens when the Show operation is loaded.
      *
@@ -84,17 +78,6 @@ class MenuItemCrudController extends CrudController
      */
     protected function setupShowOperation()
     {
-        $this->setupFieldsForShow();
-    }
-
-    private function setupFieldsForShow()
-    {
-        CRUD::column('name')->label('Menu Item Titel');
-        CRUD::column([
-            'name' => 'url',
-            'label' => 'Pagina',
-            'type' => 'select_from_array',
-            'options' => (new \App\Services\RouteService())->getRouteOptions(),
-        ]);
+        $this->setupListOperation();
     }
 }
