@@ -43,11 +43,16 @@ class Order extends Model
             }
 
             foreach ($productQuantities as $productId => $quantity) {
-                OrderDetail::updateOrCreate(
-                    ['order_id' => $order->id, 'product_id' => $productId],
-                    ['quantity' => $quantity]
-                );
+                $product = Product::find($productId);
+                if ($product && $product->stock >= $quantity) {
+                    OrderDetail::updateOrCreate(
+                        ['order_id' => $order->id, 'product_id' => $productId],
+                        ['quantity' => $quantity]
+                    );
+                    $product->decrement('stock', $quantity);
+                }
             }
+
             $order->price = $order->orderDetails->sum(function ($detail) {
                 return $detail->product->price * $detail->quantity;
             });

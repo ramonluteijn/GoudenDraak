@@ -60,10 +60,12 @@ class OrderCrudController extends CrudController
             CRUD::field([
                 'name' => "product_quantity_{$product->id}",
                 'label' => "{$product->name} (€{$product->price})",
+                'hint' => "Beschikbare voorraad: {$product->stock}",
                 'type' => 'number',
                 'attributes' => [
                     'min' => 0,
                     'step' => 1,
+                    'max' => $product->stock,
                 ],
             ]);
         }
