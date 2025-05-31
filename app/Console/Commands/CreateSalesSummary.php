@@ -51,7 +51,6 @@ class CreateSalesSummary extends Command
             ->map(function ($details) {
                 return $details->sum('quantity');
             });
-
         foreach ($productsSold as $productId => $quantity) {
             $salesSummary->products()->attach($productId, ['quantity' => $quantity]);
         }
