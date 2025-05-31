@@ -25,7 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withSchedule(function (Schedule $schedule) {
-        $schedule->command('app:create-sales-summary')->daily()->at('00:00');
+        $schedule->command('app:create-sales-summary')->everyMinute();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (NotFoundHttpException $e) {

@@ -41,6 +41,21 @@ class CreateSalesSummary extends Command
         $salesSummary->total_orders = $totalOrders;
         $salesSummary->save();
 
+        $productsSold = Order::where('created_at', '>=', now()->startOfDay())
+            ->with('orderDetails.product')
+            ->get()
+            ->flatMap(function ($order) {
+                return $order->orderDetails;
+            })
+            ->groupBy('product_id')
+            ->map(function ($details) {
+                return $details->sum('quantity');
+            });
+
+        foreach ($productsSold as $productId => $quantity) {
+            $salesSummary->products()->attach($productId, ['quantity' => $quantity]);
+        }
+
         $this->info('Sales summary record created successfully!');
     }
 }
