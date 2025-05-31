@@ -9,5 +9,20 @@ class OrderDetail extends Model
     protected $fillable = [
         'order_id',
         'product_id',
+        'quantity',
     ];
+
+    protected static function booted()
+    {
+        static::saving(function ($orderDetail) {
+            if ($orderDetail->quantity < 0) {
+                $orderDetail->quantity = 0;
+            }
+        });
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

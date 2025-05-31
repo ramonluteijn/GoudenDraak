@@ -29,6 +29,7 @@ class OrderCrudController extends CrudController
         CRUD::setModel(\App\Models\Order::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/order');
         CRUD::setEntityNameStrings('order', 'orders');
+        CRUD::denyAccess(['delete', 'update']);
     }
 
     /**
@@ -54,11 +55,20 @@ class OrderCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(OrderRequest::class);
-        CRUD::field([
-            'label'     => "Producten",
-            'type'      => 'select_multiple',
-            'name'      => 'products',
-        ]);
+        $products = \App\Models\Product::all();
+        foreach ($products as $product) {
+            CRUD::field([
+                'name' => "product_quantity_{$product->id}",
+                'label' => "{$product->name} (€{$product->price})",
+                'hint' => "Beschikbare voorraad: {$product->stock}",
+                'type' => 'number',
+                'attributes' => [
+                    'min' => 0,
+                    'step' => 1,
+                    'max' => $product->stock,
+                ],
+            ]);
+        }
     }
 
     /**
@@ -86,9 +96,16 @@ class OrderCrudController extends CrudController
             'label' => 'Producten',
             'type' => 'custom_html',
             'value' => function ($entry) {
-                return $entry->products->map(function ($product) {
-                    return "<span>{$product->name} - €{$product->price}</span> <br>";
+                $value = $entry->orderDetails->map(function ($detail) {
+                    $totalPricePerProduct = $detail->product->price * $detail->quantity;
+                    return "<span>{$detail->product->name} - €{$detail->product->price} x {$detail->quantity} = €{$totalPricePerProduct}</span><br>";
                 })->implode(' ');
+
+                $totalPrice = $entry->orderDetails->sum(function ($detail) {
+                    return $detail->product->price * $detail->quantity;
+                });
+
+                return $value . "<strong>Totaal: €{$totalPrice}</strong>";
             },
         ]);
         CRUD::column('created_at')->type('datetime')->label('Aangemaakt op');

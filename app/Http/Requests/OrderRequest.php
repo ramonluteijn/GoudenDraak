@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
 
 class OrderRequest extends FormRequest
@@ -24,11 +25,25 @@ class OrderRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            // 'name' => 'required|min:5|max:255'
-        ];
-    }
+        $rules = [];
+        $products = Product::all();
 
+        foreach ($products as $product) {
+            $rules["product_quantity_{$product->id}"] = [
+                'nullable',
+                'integer',
+                'min:1',
+                'max:' . $product->stock, // Ensure the quantity does not exceed stock
+                function ($attribute, $value, $fail) use ($product) {
+                    if ($value > $product->stock) {
+                        $fail("Het aantal voor {$product->name} mag niet groter zijn dan de beschikbare voorraad ({$product->stock}).");
+                    }
+                },
+            ];
+        }
+
+        return $rules;
+    }
     /**
      * Get the validation attributes that apply to the request.
      *
@@ -49,7 +64,9 @@ class OrderRequest extends FormRequest
     public function messages()
     {
         return [
-            //
+            'product_quantity_*.*' => 'Het aantal moet een geheel getal zijn tussen 1 en het maximaal aantal in voorraad.',
+            'product_quantity_*.*.max' => "Het aantal mag niet groter zijn dan de beschikbare voorraad.",
+            'product_quantity_*.*.min' => 'Het aantal moet minimaal 1 zijn.',
         ];
     }
 }
