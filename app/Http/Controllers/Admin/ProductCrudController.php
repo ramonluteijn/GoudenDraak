@@ -84,10 +84,15 @@ class ProductCrudController extends CrudController
         CRUD::column('price')->label('Prijs')->type('number')->decimals(2)->prefix('€ ');
         CRUD::column('stock')->label('Voorraad')->type('number');
         CRUD::column([
-            'name'    => 'category_id',
-            'label'   => 'Categorie',
-            'type'    => 'select_from_array',
-            'options' => Category::all()->pluck('name', 'id')->toArray(),
+            'name'      => 'category.name',
+            'label'     => 'Categorie',
+            'entity'    => 'category',
+            'attribute' => 'name',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('category', function ($q) use ($searchTerm) {
+                    $q->where('name', 'LIKE', '%' . $searchTerm . '%');
+                });
+            },
         ]);
     }
 

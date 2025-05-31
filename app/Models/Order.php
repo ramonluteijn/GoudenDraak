@@ -31,6 +31,38 @@ class Order extends Model
     |--------------------------------------------------------------------------
     */
 
+    protected static function booted()
+    {
+        static::saved(function ($order) {
+            $productQuantities = [];
+            foreach (request()->all() as $key => $value) {
+                if (str_starts_with($key, 'product_quantity_') && is_numeric($value) && $value > 0) {
+                    $productId = str_replace('product_quantity_', '', $key);
+                    $productQuantities[$productId] = (int) $value;
+                }
+            }
+
+            foreach ($productQuantities as $productId => $quantity) {
+                OrderDetail::updateOrCreate(
+                    ['order_id' => $order->id, 'product_id' => $productId],
+                    ['quantity' => $quantity]
+                );
+            }
+            $order->price = $order->orderDetails->sum(function ($detail) {
+                return $detail->product->price * $detail->quantity;
+            });
+
+            $order->withoutEvents(function () use ($order) {
+                $order->save();
+            });
+        });
+
+        static::deleting(function ($order) {
+            $order->orderDetails()->delete();
+        });
+    }
+
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -40,6 +72,12 @@ class Order extends Model
     public function table()
     {
         return $this->belongsTo(Table::class, 'table_id');
+    }
+
+
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
     }
 
     public function products() : BelongsToMany {
