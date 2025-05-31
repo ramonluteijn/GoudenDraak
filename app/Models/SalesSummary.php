@@ -6,7 +6,7 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class SalesSummary extends Model
 {
     use CrudTrait;
     use HasFactory;
@@ -17,23 +17,19 @@ class Product extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'products';
+    protected $table = 'sales_summaries';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-     protected $fillable = [
-        'name',
-        'description',
-        'price',
-        'stock',
-        'category_id',
+    protected $fillable = [
+        'total_sales',
+        'total_orders',
     ];
 
-     protected $casts = [
-        'price' => 'decimal:2',
-        'stock' => 'integer',
+    protected $casts = [
+        'total_sales' => 'decimal:2',
+        'total_orders' => 'integer',
     ];
-
     // protected $hidden = [];
 
     /*
@@ -42,28 +38,24 @@ class Product extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function export()
+    {
+        return '<a class="btn btn-sm btn-link" href="'.route('export', $this->id).'"><i class="la la-file-excel-o"></i> Export</a>';
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
 
-    public function orders()
+    public function products()
     {
-        return $this->belongsToMany(Order::class, 'order_details')->withPivot('order_id');
-    }
-
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
-
-    public function salesSummaries()
-    {
-        return $this->belongsToMany(SalesSummary::class, 'sales_summary_product')
+        return $this->belongsToMany(Product::class, 'sales_summary_product')
             ->withPivot('quantity')
             ->withTimestamps();
     }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
