@@ -9,12 +9,10 @@ class PageController extends Controller
     public function index($parent = null, $child = null, $grandchild = null)
     {
         $url = request()->path();
-        preg_match('/pages\/(.*)/', $url, $url);
-        $pages = Page::where('url', $url[1])->firstOrFail();
-        if ($pages->url === 'home') {
-            return to_route('home');
+        if ($url === '/') {
+            $url = 'home';
         }
-
+        $pages = Page::where('url', $url)->firstOrFail();
         return view('pages.custom', ['pages' => $pages]);
     }
 }

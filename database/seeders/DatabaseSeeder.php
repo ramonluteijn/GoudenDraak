@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RoleSeeder::class,
+            PageSeeder::class,
+            MenuItemSeeder::class,
         ]);
 
         User::insert([

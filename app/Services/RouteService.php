@@ -13,6 +13,8 @@ class RouteService
     {
         $manualOptions = [
             '/' => 'Home',
+            '/news' => 'Nieuws',
+            '/contact' => 'Contact',
         ];
         $dynamicOptions = [];
         $dynamicOptions = array_merge($dynamicOptions, $this->getContentPageRouteOptions());
@@ -33,8 +35,8 @@ class RouteService
         $dynamicOptions = [];
         $contentPages = Page::all();
         foreach ($contentPages as $contentPage) {
-            if (strtolower($contentPage->title) !== 'home') {
-                $dynamicOptions[url('/pages/' . $contentPage->url)] = ucfirst($contentPage->title);
+            if (!in_array(strtolower($contentPage->title), ['home', 'nieuws', 'contact'])) {
+                $dynamicOptions[url($contentPage->url)] = ucfirst($contentPage->title);
             }
         }
         return $dynamicOptions;
