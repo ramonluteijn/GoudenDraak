@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -15,3 +16,5 @@ Route::group(['middleware' => 'RedirectIfAuthenticated'], function () {
 });
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/pages/{parent}/{child?}/{grandchild?}', [PageController::class, 'index'])->name('custom.read');
+

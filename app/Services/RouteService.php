@@ -11,10 +11,13 @@ class RouteService
 {
     public function getRouteOptions(): array
     {
+        $manualOptions = [
+            '/' => 'Home',
+        ];
         $dynamicOptions = [];
         $dynamicOptions = array_merge($dynamicOptions, $this->getContentPageRouteOptions());
 
-        $options = array_merge($dynamicOptions);
+        $options = array_merge($manualOptions, $dynamicOptions);
         $this->predefinedRouteOptions($options);
 
         return $options;
