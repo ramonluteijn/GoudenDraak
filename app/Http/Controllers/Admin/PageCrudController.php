@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\PageRequest;
+use App\Models\Page;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -42,6 +43,8 @@ class PageCrudController extends CrudController
         CRUD::column('title')->label('Pagina Titel');
         CRUD::column('created_at')->label('Aangemaakt op')->type('datetime');
         CRUD::column('updated_at')->label('Laatst aangepast op')->type('datetime');
+        $this->crud->removeButton('delete');
+        CRUD::addButtonFromModelFunction('line', 'RemoveDeleteButton', 'checkIfMayDelete', 'end');
     }
 
     /**
@@ -80,13 +83,29 @@ class PageCrudController extends CrudController
         CRUD::column('content')->label('Pagina Content')->type('summernote');
         CRUD::column('created_at')->label('Aangemaakt op')->type('datetime');
         CRUD::column('updated_at')->label('Laatst aangepast op')->type('datetime');
+        $this->crud->removeButton('delete');
+        CRUD::addButtonFromModelFunction('line', 'RemoveDeleteButton', 'checkIfMayDelete', 'end');
 
     }
 
     private function setupFields()
     {
-        CRUD::field('title')->label('Pagina Titel')->type('text')->attributes(['placeholder' => 'Voeg hier de titel van de pagina toe']);
-        CRUD::field('url')->label('URL')->type('text')->attributes(['placeholder' => 'Voeg hier de URL van de pagina toe, bijvoorbeeld: over-ons']);
+        if(CRUD::getCurrentEntry() && CRUD::getCurrentEntry()->url === 'home' || CRUD::getCurrentEntry() && CRUD::getCurrentEntry()->url === 'news' || CRUD::getCurrentEntry() && CRUD::getCurrentEntry()->url === 'contact') {
+            CRUD::field('title')->label('Pagina Titel')->type('text')->attributes(['readonly' => 'readonly']);
+            CRUD::field('url')->label('URL')->type('text')->attributes(['readonly' => 'readonly']);
+        }
+        else {
+            CRUD::field('title')->label('Pagina Titel')->type('text')->attributes(['placeholder' => 'Voeg hier de titel van de pagina toe']);
+            CRUD::field('url')->label('URL')->type('text')->attributes(['placeholder' => 'Voeg hier de URL van de pagina toe, bijvoorbeeld: over-ons']);
+        }
         CRUD::field('content')->type('summernote')->label('Pagina Content');
+    }
+
+    public function delete(int $id)
+    {
+        $page = Page::findOrFail($id);
+        $page->delete();
+        \Alert::info('Page deleted successfully.')->flash();
+        return redirect()->back();
     }
 }

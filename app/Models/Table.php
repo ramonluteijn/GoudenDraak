@@ -23,7 +23,6 @@ class Table extends Model
     protected $guarded = ['id'];
      protected $fillable = [
         'capacity',
-        'status',
      ];
     // protected $hidden = [];
 

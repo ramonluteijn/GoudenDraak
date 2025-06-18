@@ -34,6 +34,21 @@ class Page extends Model
     |--------------------------------------------------------------------------
     */
 
+    protected static function booted()
+    {
+        static::deleted(function ($page) {
+            MenuItem::where('url', config('app.url').'/'.$page->url)->delete();
+        });
+    }
+
+    public function checkIfMayDelete($crud)
+    {
+        if (!in_array($this->url, ['home', 'news', 'contact'])) {
+            return '<a class="btn btn-sm btn-link" href="'.route('pages.delete', $this->id).'"><i class="la la-eye"></i> Verwijderen</a>';
+        }
+        return '';
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

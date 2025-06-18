@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('tables', function (Blueprint $table) {
             $table->id();
             $table->integer('capacity')->default(4); // Default capacity set to 4
-            $table->string('status');
             $table->timestamps();
         });
     }
