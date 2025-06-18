@@ -22,7 +22,11 @@
     <main>
         <x-blocks.top-banner />
         <x-blocks.hero />
-        @yield("content")
+        <div class="container">
+            <div class="content-block">
+                @yield("content")
+            </div>
+        </div>
         <x-blocks.footer />
     </main>
 

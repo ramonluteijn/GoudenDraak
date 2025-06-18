@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
-@section('title', 'Home')
+@section('title', $pages->title)
 
 @section('content')
-
+    {!! $pages->content !!}
 @endsection
