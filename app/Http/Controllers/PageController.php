@@ -13,6 +13,6 @@ class PageController extends Controller
             $url = 'home';
         }
         $pages = Page::where('url', $url)->firstOrFail();
-        return view('pages.custom', ['pages' => $pages]);
+        return view('pages.index', ['pages' => $pages]);
     }
 }
