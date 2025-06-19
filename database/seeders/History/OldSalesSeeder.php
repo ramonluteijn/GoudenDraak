@@ -49,6 +49,15 @@ class OldSalesSeeder extends Seeder
                     }),
                 ]);
 
+            DB::table('sales_summaries')->insert([
+                'total_sales' => $sales->sum(function ($sale) use ($oldProducts) {
+                    $product = $oldProducts->where('id', $sale->itemId)->first();
+                    return $product ? $product->price * $sale->amount : 0;
+                }),
+                'total_orders' => $sales->count(),
+                'created_at' => $date,
+                'updated_at' => now(),
+            ]);
         }
     }
 }

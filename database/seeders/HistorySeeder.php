@@ -21,9 +21,9 @@ class HistorySeeder extends Seeder
         ]);
 
         $dropTables = [
-            'oldProducts',
-            'oldSales',
-            'oldUsers',
+            'OldProducts',
+            'OldSales',
+            'OldUsers',
             'menu_pdf',
             'specialiteiten',
             'rijst_enzo',
