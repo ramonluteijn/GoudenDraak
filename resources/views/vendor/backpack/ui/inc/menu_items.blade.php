@@ -12,6 +12,8 @@
     <x-backpack::menu-dropdown-item title="Pagina's" icon="la la-question" :link="backpack_url('page')" />
     <x-backpack::menu-dropdown-item title="Vragen" icon="la la-question" :link="backpack_url('question')" />
     <x-backpack::menu-dropdown-item title="Tafels" icon="la la-question" :link="backpack_url('table')" />
+    <x-backpack::menu-dropdown-item title="Discounts" icon="la la-question" :link="backpack_url('discount')" />
 </x-backpack::menu-dropdown>
 
 <x-backpack::menu-item title="Sales summaries" icon="la la-question" :link="backpack_url('sales-summary')" />
+
