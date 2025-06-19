@@ -12,7 +12,7 @@
 @php
     if (strpos(Route::current()->getName(), '.') !== false) {
         $parts = explode('.', Route::current()->getName());
-        $className = $parts[1]; // user.events.index -> events
+        $className = $parts[0];
     }
     else {
         $className = Route::current()->getName();
