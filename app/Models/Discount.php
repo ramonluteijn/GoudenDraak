@@ -24,6 +24,12 @@ class Discount extends Model
     // protected $fillable = [];
     // protected $hidden = [];
 
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'discount' => 'integer',
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
