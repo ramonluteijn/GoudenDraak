@@ -6,7 +6,7 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class Discount extends Model
 {
     use CrudTrait;
     use HasFactory;
@@ -17,24 +17,18 @@ class Product extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'products';
+    protected $table = 'discounts';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-     protected $fillable = [
-        'name',
-        'description',
-        'price',
-        'stock',
-        'category_id',
-    ];
-
-     protected $casts = [
-        'price' => 'decimal:2',
-        'stock' => 'integer',
-    ];
-
+    // protected $fillable = [];
     // protected $hidden = [];
+
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'discount' => 'integer',
+    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -42,33 +36,17 @@ class Product extends Model
     |--------------------------------------------------------------------------
     */
 
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
-    public function orders()
+    public function product()
     {
-        return $this->belongsToMany(Order::class, 'order_details')->withPivot('order_id');
+        return $this->belongsTo(Product::class);
     }
 
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
-
-    public function salesSummaries()
-    {
-        return $this->belongsToMany(SalesSummary::class, 'sales_summary_product')
-            ->withPivot('quantity')
-            ->withTimestamps();
-    }
-
-    public function discounts()
-    {
-        return $this->hasMany(Discount::class);
-    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
