@@ -3,7 +3,6 @@
 @section('content')
     <h1>Shopping Cart</h1>
     <div class="shopping-cart">
-        <p>Your shopping cart is currently empty.</p>
-        <!-- Add shopping cart items here -->
+        <p><a href="{{route('shop.create-order')}}">Maak een order aan</a></p>
     </div>
 @stop

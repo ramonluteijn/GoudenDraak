@@ -29,9 +29,6 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (NotFoundHttpException $e) {
-            return redirect()->route('home.index');
-        });
-        $exceptions->render(function (RouteNotFoundException $e) {
-            return response()->json(['error' => 'Route not found'], 404);
+            return redirect()->route('home');
         });
     })->create();

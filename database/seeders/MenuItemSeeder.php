@@ -33,7 +33,7 @@ class MenuItemSeeder extends Seeder
             ],
             [
                 'name' => 'Winkelwagen',
-                'url' => '/cart',
+                'url' => '/shop/cart',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
