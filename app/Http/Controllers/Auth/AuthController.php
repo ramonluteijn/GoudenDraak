@@ -33,7 +33,7 @@ class AuthController
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return to_route('dashboard.show');
+            return to_route('orders.index');
         }
 
         return back()->withErrors([
@@ -55,6 +55,6 @@ class AuthController
 
         Auth::login($user);
 
-        return to_route('dashboard.show');
+        return to_route('orders.index');
     }
 }

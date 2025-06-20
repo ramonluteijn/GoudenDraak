@@ -22,7 +22,13 @@ class Order extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
+    protected $fillable = [
+        'price',
+        'take_away',
+        'price',
+        'table_id',
+        'user_id',
+    ];
     // protected $hidden = [];
 
     /*
@@ -84,7 +90,6 @@ class Order extends Model
         return $this->belongsTo(Table::class, 'table_id');
     }
 
-
     public function orderDetails()
     {
         return $this->hasMany(OrderDetail::class);
@@ -92,6 +97,11 @@ class Order extends Model
 
     public function products() : BelongsToMany {
         return $this->belongsToMany(Product::class, 'order_details')->withPivot('product_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
 
