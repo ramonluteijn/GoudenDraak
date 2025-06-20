@@ -6,7 +6,7 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SalesSummary extends Model
+class Discount extends Model
 {
     use CrudTrait;
     use HasFactory;
@@ -17,20 +17,18 @@ class SalesSummary extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'sales_summaries';
+    protected $table = 'discounts';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    protected $fillable = [
-        'total_sales',
-        'total_orders',
-    ];
+    // protected $fillable = [];
+    // protected $hidden = [];
 
     protected $casts = [
-        'total_sales' => 'decimal:2',
-        'total_orders' => 'integer',
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'discount' => 'integer',
     ];
-    // protected $hidden = [];
 
     /*
     |--------------------------------------------------------------------------
@@ -38,22 +36,15 @@ class SalesSummary extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function export()
-    {
-        return '<a class="btn btn-sm btn-link" href="'.route('export-summary', $this->id).'"><i class="la la-file-excel-o"></i> Export</a>';
-    }
 
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
-    public function products()
+    public function product()
     {
-        return $this->belongsToMany(Product::class, 'sales_summary_product')
-            ->withPivot('quantity')
-            ->withTimestamps();
+        return $this->belongsTo(Product::class);
     }
 
     /*

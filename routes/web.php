@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\OrderCrudController;
 use App\Http\Controllers\Admin\PageCrudController;
 use App\Http\Controllers\Admin\SalesSummaryCrudController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\QuestionController;
@@ -25,13 +27,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/profile/orders/{id}', [OrderController::class, 'show'])->name('order.show');
 });
 
-Route::get('/export/{id}', [SalesSummaryCrudController::class, 'export'])->name('export');
+Route::get('/export/summary/{id}', [SalesSummaryCrudController::class, 'export'])->name('export-summary');
+Route::get('/export/receipt/{id}', [OrderCrudController::class, 'export'])->name('export-receipt');
+Route::get('/export/products', [\App\Exports\ProductExport::class, 'download'])->name('export-products');
+
 
 Route::prefix('/survey')->name('survey.')->group(function () {
     Route::get('/', [QuestionController::class, 'index'])->name('index');
     Route::post('/', [QuestionController::class, 'store'])->name('store');
     Route::get('/confirmation', [QuestionController::class, 'confirmation'])->name('confirmation');
 });
+Route::get('/discounts', [DiscountController::class, 'index'])->name('discounts.index');
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/{parent}/{child?}/{grandchild?}', [PageController::class, 'index'])->name('custom.read');

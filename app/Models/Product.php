@@ -64,6 +64,11 @@ class Product extends Model
             ->withPivot('quantity')
             ->withTimestamps();
     }
+
+    public function discounts()
+    {
+        return $this->hasMany(Discount::class);
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES

@@ -16,6 +16,7 @@
         "vite": "^6.2.4"
     },
     "dependencies": {
+        "puppeteer": "^24.10.2",
         "vue": "^3.5.17"
     }
 }

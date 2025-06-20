@@ -44,6 +44,7 @@ class OrderCrudController extends CrudController
         CRUD::column('table.id')->label('Tafel nummer');
         CRUD::column('take_away')->type('boolean')->label('Afhaal');
         CRUD::column('price')->type('decimal')->label('Prijs');
+        CRUD::addButtonFromModelFunction('line', 'ExportButton', 'Export', 'end');
     }
 
     /**
@@ -109,5 +110,14 @@ class OrderCrudController extends CrudController
             },
         ]);
         CRUD::column('created_at')->type('datetime')->label('Aangemaakt op');
+    }
+
+
+    /**
+     * Export the order to a receipt format.
+     */
+    public function export($id)
+    {
+        return (new \App\Exports\ReceiptExport($id))->download();
     }
 }
