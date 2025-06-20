@@ -43,7 +43,7 @@ class SalesSummaryExport implements FromCollection, WithMapping, WithHeadings, W
             $rows[] = [
                 $product->name,
                 $product->pivot->quantity,
-                number_format($product->pivot->quantity * $product->price, 2),
+                number_format($product->pivot->quantity * $product->pivot->price, 2),
             ];
         }
 
