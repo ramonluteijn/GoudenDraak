@@ -31,6 +31,12 @@ class MenuItemSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'Winkelwagen',
+                'url' => '/cart',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ];
 
         foreach ($menuItems as $item) {

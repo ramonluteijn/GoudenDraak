@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\ShoppingCartController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PageController::class, 'index'])->name('home');
@@ -36,7 +37,7 @@ Route::prefix('/survey')->name('survey.')->group(function () {
     Route::get('/confirmation', [QuestionController::class, 'confirmation'])->name('confirmation');
 });
 Route::get('/discounts', [DiscountController::class, 'index'])->name('discounts.index');
-
+Route::get('/cart', [ShoppingCartController::class, 'index'])->name('shoppingcart.index');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/{parent}/{child?}/{grandchild?}', [PageController::class, 'index'])->name('custom.read');
 
