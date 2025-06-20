@@ -40,10 +40,24 @@ class SalesSummaryExport implements FromCollection, WithMapping, WithHeadings, W
         $rows = [];
 
         foreach ($salesSummary->products as $product) {
+            $orderDetails = \App\Models\OrderDetail::where('product_id', $product->id)
+                ->whereHas('order', function ($query) use ($salesSummary) {
+                    $query->whereDate('created_at', $salesSummary->created_at->toDateString());
+                })
+                ->get();
+
+            $totalQuantity = $orderDetails->sum('quantity');
+            $totalPrice = $orderDetails->sum(function ($detail) {
+                $price = $detail->price;
+                $discount = $detail->discount ?? 0;
+                $discountedPrice = $discount > 0 ? $price * (1 - ($discount / 100)) : $price;
+                return $discountedPrice * $detail->quantity;
+            });
+
             $rows[] = [
                 $product->name,
-                $product->pivot->quantity,
-                number_format($product->pivot->quantity * $product->pivot->price, 2),
+                $totalQuantity,
+                number_format($totalPrice, 2),
             ];
         }
 

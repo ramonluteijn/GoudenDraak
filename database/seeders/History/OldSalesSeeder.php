@@ -34,6 +34,7 @@ class OldSalesSeeder extends Seeder
                         'order_id'   => $orderId,
                         'product_id' => $product->id,
                         'quantity'   => $sale->amount,
+                        'price'      => $product->price,
                         'created_at' => $sale->saleDate,
                         'updated_at' => now(),
                     ]);
