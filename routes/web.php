@@ -29,6 +29,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('/export/summary/{id}', [SalesSummaryCrudController::class, 'export'])->name('export-summary');
 Route::get('/export/receipt/{id}', [OrderCrudController::class, 'export'])->name('export-receipt');
+Route::get('/export/products', [\App\Exports\ProductExport::class, 'download'])->name('export-products');
+
 
 Route::prefix('/survey')->name('survey.')->group(function () {
     Route::get('/', [QuestionController::class, 'index'])->name('index');
