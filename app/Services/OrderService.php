@@ -32,14 +32,26 @@ class OrderService
         $this->ensureOrderInitialized();
         $existing = $this->order->products()->where('product_id', $productId)->first();
 
+        $product = \App\Models\Product::with(['discounts' => function ($query) {
+            $query->where('start_date', '<=', now())
+                ->where('end_date', '>=', now());
+        }])->find($productId);
+
+        $activeDiscount = $product->discounts->sortByDesc('discount')->first();
+        $unitPrice = $activeDiscount
+            ? round($product->price * (1 - $activeDiscount->discount / 100), 2)
+            : $product->price;
+
         if ($existing) {
             $this->updateProductQuantity($productId, $existing->pivot->quantity + $quantity);
             return;
         }
 
-        $this->order->products()->attach($productId, ['quantity' => $quantity]);
+        $this->order->products()->attach($productId, [
+            'quantity' => $quantity,
+            'price' => $unitPrice,
+        ]);
         $this->updateOrderPrice();
-
         $this->order->refresh();
     }
 
@@ -53,7 +65,22 @@ class OrderService
             if ($newQuantity <= 0) {
                 $this->order->products()->detach($productId);
             } else {
-                $this->order->products()->updateExistingPivot($productId, ['quantity' => $newQuantity]);
+                $price = $existing->pivot->price;
+                if ($price === null) {
+                    $product = \App\Models\Product::with(['discounts' => function ($query) {
+                        $query->where('start_date', '<=', now())
+                            ->where('end_date', '>=', now());
+                    }])->find($productId);
+
+                    $activeDiscount = $product->discounts->sortByDesc('discount')->first();
+                    $price = $activeDiscount
+                        ? round($product->price * (1 - $activeDiscount->discount / 100), 2)
+                        : $product->price;
+                }
+                $this->order->products()->updateExistingPivot($productId, [
+                    'quantity' => $newQuantity,
+                    'price' => $price,
+                ]);
             }
             $this->order->refresh();
         }
@@ -63,10 +90,24 @@ class OrderService
     public function updateProductQuantity($productId, $quantity)
     {
         $this->ensureOrderInitialized();
+
+        $product = \App\Models\Product::with(['discounts' => function ($query) {
+            $query->where('start_date', '<=', now())
+                ->where('end_date', '>=', now());
+        }])->find($productId);
+
+        $activeDiscount = $product->discounts->sortByDesc('discount')->first();
+        $unitPrice = $activeDiscount
+            ? round($product->price * (1 - $activeDiscount->discount / 100), 2)
+            : $product->price;
+
         if ($quantity <= 0) {
             $this->order->products()->detach($productId);
         } else {
-            $this->order->products()->updateExistingPivot($productId, ['quantity' => $quantity]);
+            $this->order->products()->updateExistingPivot($productId, [
+                'quantity' => $quantity,
+                'price' => $unitPrice,
+            ]);
         }
         $this->updateOrderPrice();
         $this->order->refresh();

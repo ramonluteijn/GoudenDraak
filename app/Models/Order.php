@@ -51,22 +51,34 @@ class Order extends Model
             foreach ($productQuantities as $productId => $quantity) {
                 $product = Product::find($productId);
                 if ($product && $product->stock >= $quantity) {
+                    $now = now();
+                    $discount = $product->discounts()
+                        ->where('start_date', '<=', $now)
+                        ->where('end_date', '>=', $now)
+                        ->orderByDesc('discount')
+                        ->first();
+
+                    $price = $discount
+                        ? $product->price * (1 - $discount->discount / 100)
+                        : $product->price;
+
                     OrderDetail::updateOrCreate(
                         ['order_id' => $order->id, 'product_id' => $productId],
-                        ['quantity' => $quantity]
+                        ['quantity' => $quantity, 'price' => $price]
                     );
                     $product->decrement('stock', $quantity);
                 }
             }
 
             $order->price = $order->orderDetails->sum(function ($detail) {
-                return $detail->product->price * $detail->quantity;
+                return $detail->price * $detail->quantity;
             });
 
             $order->withoutEvents(function () use ($order) {
                 $order->save();
             });
         });
+
 
         static::deleting(function ($order) {
             $order->orderDetails()->delete();
@@ -77,7 +89,6 @@ class Order extends Model
     {
         return '<a class="btn btn-sm btn-link" href="'.route('export-receipt', $this->id).'"><i class="la la-file-excel-o"></i> Exporteren</a>';
     }
-
 
     /*
     |--------------------------------------------------------------------------
@@ -96,7 +107,7 @@ class Order extends Model
     }
 
     public function products() : BelongsToMany {
-        return $this->belongsToMany(Product::class, 'order_details')->withPivot('product_id', 'quantity')->withTimestamps();
+        return $this->belongsToMany(Product::class, 'order_details')->withPivot('product_id', 'quantity', 'price')->withTimestamps();
     }
 
     public function user()

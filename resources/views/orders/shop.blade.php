@@ -24,7 +24,15 @@
                             </a>
                         </td>
                         <td>{{ $product['description'] }}</td>
-                        <td>&euro; {{ number_format($product['price'], 2) }}</td>
+{{--                        <td>&euro; {{ number_format($product['price'], 2) }}</td>--}}
+                        <td>
+                            @if($product->discounted_price)
+                                <span style="text-decoration: line-through;">&euro; {{ number_format($product->original_price, 2) }}</span>
+                                <strong style="color: #d9534f;">&euro; {{ number_format($product->discounted_price, 2) }}</strong>
+                                @else
+                                    &euro; {{ number_format($product->original_price, 2) }}
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -42,7 +50,7 @@
         <ul>
             @foreach($order->products as $product)
                 <li>
-                    {{ $product->name }} - &euro;{{ number_format($product->price, 2) }}
+                    {{ $product->name }} - &euro;{{ number_format($product->pivot->price, 2) }}
                     <a href="{{ route('shop.removefromcart', ['id' => $product->id]) }}" class="btn btn-danger btn-sm">-</a>
                     <span class="badge badge-secondary">{{ $product->pivot->quantity }}</span>
                     <a href="{{ route('shop.addtocart', ['id' => $product->id]) }}" class="btn btn-success btn-sm">+</a>

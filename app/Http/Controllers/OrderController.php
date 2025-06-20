@@ -19,8 +19,21 @@ class OrderController extends Controller
 
     public function index(): View
     {
-        $products = Product::all();
-        $categories = Category::all();
+        $categories = Category::with(['products.discounts' => function($query) {
+            $query->where('start_date', '<=', now())
+                  ->where('end_date', '>=', now());
+        }])->get();
+
+        foreach ($categories as $category) {
+            foreach ($category->products as $product) {
+                $activeDiscount = $product->discounts->sortByDesc('discount')->first();
+                $product->original_price = $product->price;
+                $product->discounted_price = $activeDiscount
+                    ? round($product->price * (1 - $activeDiscount->discount / 100), 2)
+                    : null;
+            }
+        }
+
         if (session('order_id')) {
             $this->orderService->loadOrder(session('order_id'));
         } else {
@@ -30,7 +43,6 @@ class OrderController extends Controller
 
         return view('orders.shop', [
             'order' => $this->orderService->getOrder(),
-            'products' => $products,
             'categories' => $categories,
         ]);
     }

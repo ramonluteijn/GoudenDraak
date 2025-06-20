@@ -55,12 +55,28 @@ class OrderCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
+        $now = now();
         CRUD::setValidation(OrderRequest::class);
         $products = \App\Models\Product::all();
         foreach ($products as $product) {
+
+            $discount = $product->discounts()
+                ->where('start_date', '<=', $now)
+                ->where('end_date', '>=', $now)
+                ->orderByDesc('discount')
+                ->first();
+
+            $displayPrice = $product->price;
+
+            $label = "{$product->name} (€{$product->price})";
+            if ($discount) {
+                $discountedPrice = number_format($discount->product->price*(1.00-($discount->discount / 100)), 2);
+                $label = "{$product->name} (<s class='text-danger'>€{$product->price}</s> <strong class='text-success'>€{$discountedPrice}</strong>)";
+            }
+
             CRUD::field([
                 'name' => "product_quantity_{$product->id}",
-                'label' => "{$product->name} (€{$product->price})",
+                'label' => $label,
                 'hint' => "Beschikbare voorraad: {$product->stock}",
                 'type' => 'number',
                 'attributes' => [
@@ -98,12 +114,12 @@ class OrderCrudController extends CrudController
             'type' => 'custom_html',
             'value' => function ($entry) {
                 $value = $entry->orderDetails->map(function ($detail) {
-                    $totalPricePerProduct = $detail->product->price * $detail->quantity;
-                    return "<span>{$detail->product->name} - €{$detail->product->price} x {$detail->quantity} = €{$totalPricePerProduct}</span><br>";
+                    $totalPricePerProduct = $detail->price * $detail->quantity;
+                    return "<span>{$detail->product->name} - €{$detail->price} x {$detail->quantity} = €{$totalPricePerProduct}</span><br>";
                 })->implode(' ');
 
                 $totalPrice = $entry->orderDetails->sum(function ($detail) {
-                    return $detail->product->price * $detail->quantity;
+                    return $detail->price * $detail->quantity;
                 });
 
                 return $value . "<strong>Totaal: €{$totalPrice}</strong>";
@@ -111,7 +127,6 @@ class OrderCrudController extends CrudController
         ]);
         CRUD::column('created_at')->type('datetime')->label('Aangemaakt op');
     }
-
 
     /**
      * Export the order to a receipt format.

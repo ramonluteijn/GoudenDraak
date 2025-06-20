@@ -10,6 +10,7 @@ class OrderDetail extends Model
         'order_id',
         'product_id',
         'quantity',
+        'price',
     ];
 
     protected static function booted()
