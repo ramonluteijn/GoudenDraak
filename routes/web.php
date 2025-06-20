@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\PageCrudController;
 use App\Http\Controllers\Admin\SalesSummaryCrudController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\QuestionController;
 use Illuminate\Support\Facades\Route;
@@ -22,9 +23,8 @@ Route::group(['middleware' => 'RedirectIfAuthenticated'], function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
-    Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
-    Route::post('/profile/update', [AuthController::class, 'updateProfile'])->name('profile.update');
+    Route::get('/profile/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/profile/orders/{id}', [OrderController::class, 'show'])->name('order.show');
 });
 
 Route::get('/export/summary/{id}', [SalesSummaryCrudController::class, 'export'])->name('export-summary');
@@ -41,6 +41,4 @@ Route::get('/discounts', [DiscountController::class, 'index'])->name('discounts.
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/{parent}/{child?}/{grandchild?}', [PageController::class, 'index'])->name('custom.read');
-
-
 
