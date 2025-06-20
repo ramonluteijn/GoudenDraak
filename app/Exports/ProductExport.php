@@ -12,7 +12,7 @@ class ProductExport
     public function download()
     {
         $products = Product::with('category')->get()->groupBy('category.name');
-        $discounts = Discount::where('active', true)->get();
+        $discounts = Discount::where('active', true)->with('product')->orderBy('product_id', 'asc')->get();
 
         return Pdf::view('pdf.products', [
             'products' => $products,

@@ -19,6 +19,40 @@
 <body>
     <h1>Restaurant Menu</h1>
 
+    @if($discounts->count())
+        <div class="discounts">
+            <h2>Aanbiedingen</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>Nummer</th>
+                    <th>Product</th>
+                    <th>Beschrijving</th>
+                    <th class="price">Normale Prijs</th>
+                    <th class="price">Prijs</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($discounts as $discount)
+                    <tr>
+                        <td>#{{ $discount->product->id }}</td>
+                        <td>{!! $discount->product->name !!}</td>
+                        <td>{{ $discount->product->description ?? '-' }}</td>
+                        <td class="price">
+                            &euro; {{ number_format($discount->product->price, 2) }}
+                        </td>
+                        <td class="price">
+                            &euro; {{ number_format($discount->product->price*(1.00-($discount->discount / 100)), 2) }}
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+
+    @pageBreak
+
     @php
         $grouped = $products;
     @endphp
@@ -28,6 +62,7 @@
         <table>
             <thead>
                 <tr>
+                    <th>Nummer</th>
                     <th>Product</th>
                     <th>Beschrijving</th>
                     <th class="price">Prijs</th>
@@ -36,7 +71,8 @@
             <tbody>
                 @foreach($items as $product)
                     <tr>
-                        <td>{{ $product->name }}</td>
+                        <td>#{{ $product->id }}</td>
+                        <td>{!! $product->name !!}</td>
                         <td>{{ $product->description ?? '-' }}</td>
                         <td class="price">&euro; {{ number_format($product->price, 2) }}</td>
                     </tr>
@@ -44,17 +80,6 @@
             </tbody>
         </table>
     @endforeach
-
-    @if($discounts->count())
-        <div class="discounts">
-            <h3>Aanbiedingen</h3>
-            <ul>
-                @foreach($discounts as $discount)
-                    <li>{{ $discount->name }}: {{ $discount->description ?? '' }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
 
     <div class="footer">
         &copy; {{ date('Y') }} De Gouden Draak. Alle rechten voorbehouden.<br>
