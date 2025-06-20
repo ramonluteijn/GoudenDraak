@@ -49,7 +49,7 @@ class OldSalesSeeder extends Seeder
                     }),
                 ]);
 
-            DB::table('sales_summaries')->insert([
+            $salesSummaryId = DB::table('sales_summaries')->insertGetId([
                 'total_sales' => $sales->sum(function ($sale) use ($oldProducts) {
                     $product = $oldProducts->where('id', $sale->itemId)->first();
                     return $product ? $product->price * $sale->amount : 0;
@@ -58,6 +58,18 @@ class OldSalesSeeder extends Seeder
                 'created_at' => $date,
                 'updated_at' => now(),
             ]);
+
+            $productGroups = $sales->groupBy('itemId');
+            foreach ($productGroups as $productId => $productSales) {
+                $quantity = $productSales->sum('amount');
+                DB::table('sales_summary_product')->insert([
+                    'sales_summary_id' => $salesSummaryId,
+                    'product_id' => $productId,
+                    'quantity' => $quantity,
+                    'created_at' => $date,
+                    'updated_at' => now(),
+                ]);
+            }
         }
     }
 }
