@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\OrderCrudController;
 use App\Http\Controllers\Admin\PageCrudController;
 use App\Http\Controllers\Admin\SalesSummaryCrudController;
 use App\Http\Controllers\Auth\AuthController;
@@ -26,7 +27,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/profile/update', [AuthController::class, 'updateProfile'])->name('profile.update');
 });
 
-Route::get('/export/{id}', [SalesSummaryCrudController::class, 'export'])->name('export');
+Route::get('/export/summary/{id}', [SalesSummaryCrudController::class, 'export'])->name('export-summary');
+Route::get('/export/receipt/{id}', [OrderCrudController::class, 'export'])->name('export-receipt');
 
 Route::prefix('/survey')->name('survey.')->group(function () {
     Route::get('/', [QuestionController::class, 'index'])->name('index');

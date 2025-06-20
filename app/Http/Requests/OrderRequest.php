@@ -44,6 +44,25 @@ class OrderRequest extends FormRequest
 
         return $rules;
     }
+
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $hasAtLeastOne = false;
+            foreach (Product::all() as $product) {
+                $value = $this->input("product_quantity_{$product->id}");
+                if (!is_null($value) && $value !== '') {
+                    $hasAtLeastOne = true;
+                    break;
+                }
+            }
+            if (!$hasAtLeastOne) {
+                $validator->errors()->add('product_quantity', 'Vul voor minstens één product een aantal in.');
+            }
+        });
+    }
+
     /**
      * Get the validation attributes that apply to the request.
      *
