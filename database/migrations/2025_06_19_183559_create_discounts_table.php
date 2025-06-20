@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('end_date');
             $table->integer('discount');
             $table->unsignedBigInteger('product_id')->nullable();
+            $table->boolean('active')->default(false);
             $table->timestamps();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('set null');
         });

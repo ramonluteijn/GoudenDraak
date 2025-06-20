@@ -69,12 +69,23 @@ class DiscountCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(DiscountRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
 
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
+        CRUD::field([
+            'label'     => "Products (Ctrl + Klik om meerdere te selecteren!)",
+            'type'      => 'select_multiple',
+            'name'      => 'product_id', // the method that defines the relationship in your Model
+            'entity'    => 'product', // the method that defines the relationship in your Model
+            'model'     => \App\Models\Product::class, // the related model
+            'attribute' => 'name', // the column to display in the dropdown
+            'options'   => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+        ]);
+
+        CRUD::field('start_date')->label('Startdatum')->type('date');
+        CRUD::field('end_date')->label('Einddatum')->type('date');
+        CRUD::field('discount')->label('Korting (%)')->type('number');
+        CRUD::field('active')->label('Actief')->type('checkbox')->default(0);
     }
 
     /**
@@ -86,5 +97,24 @@ class DiscountCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    public function store()
+    {
+//        $data = $this->crud->getRequest()->all();
+        $data = $this->crud->validateRequest();
+
+        if (isset($data['product_id']) && is_array($data['product_id'])) {
+            foreach ($data['product_id'] as $productId) {
+                $discount = new \App\Models\Discount();
+                $discount->start_date = $data['start_date'];
+                $discount->end_date = $data['end_date'];
+                $discount->discount = $data['discount'];
+                $discount->product_id = $productId;
+                $discount->active = $data['active'] ?? 0; // Default to 0 if not set
+                $discount->save();
+            }
+        }
+        return redirect($this->crud->route);
     }
 }

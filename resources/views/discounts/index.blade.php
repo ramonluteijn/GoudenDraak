@@ -19,6 +19,7 @@
                     </thead>
                     <tbody>
                     @foreach($discounts as $discount)
+                        @if($discount->active && $discount->end_date >= now() && $discount->start_date <= now())
                         <tr>
                             <td>{{ $discount->product->name }}</td>
                             <td>€{{ number_format($discount->product->price, 2) }}</td>
@@ -26,6 +27,7 @@
                             <td>€{{ number_format($discount->product->price * (1 - $discount->discount / 100), 2) }}</td>
                             <td>{{ $discount->end_date->format('d-m-Y') }}</td>
                         </tr>
+                        @endif
                     @endforeach
                     </tbody>
                 </table>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
 
 class DiscountRequest extends FormRequest
@@ -13,7 +14,6 @@ class DiscountRequest extends FormRequest
      */
     public function authorize()
     {
-        // only allow updates if the user is logged in
         return backpack_auth()->check();
     }
 
@@ -24,13 +24,14 @@ class DiscountRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-
+        $rules = [
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'discount' => 'required|integer|min:0|max:100',
-            'product_id' => 'required|exists:products,id',
+            'product_id'=> 'required|array',
         ];
+
+        return $rules;
     }
 
     /**
@@ -41,7 +42,9 @@ class DiscountRequest extends FormRequest
     public function attributes()
     {
         return [
-            //
+            'start_date' => 'Startdatum',
+            'end_date' => 'Einddatum',
+            'discount' => 'Korting',
         ];
     }
 
@@ -60,8 +63,7 @@ class DiscountRequest extends FormRequest
             'discount.integer' => 'De korting moet een geheel getal zijn.',
             'discount.min' => 'De korting moet minimaal 0 zijn.',
             'discount.max' => 'De korting mag maximaal 100 zijn.',
-            'product_id.required' => 'Het product is verplicht.',
-            'product_id.exists' => 'Het geselecteerde product bestaat niet.',
+            'product_id.required' => 'Er moet minimaal één product worden geselecteerd.', // Custom error message
         ];
     }
 }
