@@ -19,6 +19,7 @@ class ProductExport
             'discounts' => $discounts,
         ])
             ->paperSize(210, 297)
-            ->name('products-list.pdf');
+            ->name('products-list.pdf')
+            ->download();
     }
 }
