@@ -52,6 +52,7 @@
 </table>
 <div class="footer">
     Bedankt voor uw bezoek!
+    <img src="{{ $qrCode }}" alt="QR Code" style="margin-top:6px; width:60px; height:60px; display:block; margin-left:auto; margin-right:auto;">
 </div>
 </body>
 </html>
