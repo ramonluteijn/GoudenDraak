@@ -19,4 +19,13 @@
             transform: scaleX(-1);
         }
     }
+    .subtitle,.title {
+        font-weight: 700;
+    }
+    .subtitle {
+        font-size: 40px;
+    }
+    .title {
+        font-size: 50px;
+    }
 }
