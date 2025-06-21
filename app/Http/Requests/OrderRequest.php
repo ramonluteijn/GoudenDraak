@@ -33,7 +33,7 @@ class OrderRequest extends FormRequest
                 'nullable',
                 'integer',
                 'min:1',
-                'max:' . $product->stock, // Ensure the quantity does not exceed stock
+                'max:' . $product->stock,
                 function ($attribute, $value, $fail) use ($product) {
                     if ($value > $product->stock) {
                         $fail("Het aantal voor {$product->name} mag niet groter zijn dan de beschikbare voorraad ({$product->stock}).");

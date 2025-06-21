@@ -73,10 +73,10 @@ class DiscountCrudController extends CrudController
         CRUD::field([
             'label'     => "Products (Ctrl + Klik om meerdere te selecteren!)",
             'type'      => 'select_multiple',
-            'name'      => 'product_id', // the method that defines the relationship in your Model
-            'entity'    => 'product', // the method that defines the relationship in your Model
-            'model'     => \App\Models\Product::class, // the related model
-            'attribute' => 'name', // the column to display in the dropdown
+            'name'      => 'product_id',
+            'entity'    => 'product',
+            'model'     => \App\Models\Product::class,
+            'attribute' => 'name',
             'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -101,7 +101,6 @@ class DiscountCrudController extends CrudController
 
     public function store()
     {
-//        $data = $this->crud->getRequest()->all();
         $data = $this->crud->validateRequest();
 
         if (isset($data['product_id']) && is_array($data['product_id'])) {
@@ -111,7 +110,7 @@ class DiscountCrudController extends CrudController
                 $discount->end_date = $data['end_date'];
                 $discount->discount = $data['discount'];
                 $discount->product_id = $productId;
-                $discount->active = $data['active'] ?? 0; // Default to 0 if not set
+                $discount->active = $data['active'] ?? 0;
                 $discount->save();
             }
         }
