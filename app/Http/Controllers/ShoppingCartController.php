@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ReceiptExport;
+
 class ShoppingCartController extends Controller
 {
     public function index()
@@ -11,7 +13,13 @@ class ShoppingCartController extends Controller
 
     public function confirmation()
     {
+        $qrcode = (new ReceiptExport(session()->get('order_id')))->confirmation();
+        $orderId = session()->get('order_id');
         session()->forget('order_id');
-        return view('shoppingcart.confirmation');
+
+        return view('shoppingcart.confirmation', [
+            'qrcode' => $qrcode,
+            'orderId' => $orderId,
+        ]);
     }
 }

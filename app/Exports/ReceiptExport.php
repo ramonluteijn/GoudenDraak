@@ -23,12 +23,35 @@ class ReceiptExport
             data: route('survey.index')
         );
 
+
         return Pdf::view('pdf.receipt', [
             'order' => $this->order,
             'qrCode' => $qrCode->build()->getDataUri(),
         ])
             ->paperSize(85, 100)
-            ->name('receipt-order-' . $this->order->id . '.pdf')
+            ->name('receipt-order-' . $this->order->id . '.pdf');
+    }
+
+    public function confirmation()
+    {
+        $orderUrl = route('export.receipt', $this->order->id);
+
+        $qrCode = new Builder(
+            writer: new PngWriter(),
+            data: $orderUrl
+        );
+        return $qrCode->build()->getDataUri();
+    }
+
+    public function confirmationDownload($id)
+    {
+        $this->order = Order::with(['orderDetails.product', 'table'])->findOrFail($id);
+        return Pdf::view('pdf.receipt-confirmation', [
+            'qrCode' => $this->confirmation(),
+            'order' => $this->order,
+        ])
+            ->paperSize(85, 100)
+            ->name('receipt-confirmation-order-' . $this->order->id . '.pdf')
             ->download();
     }
 }

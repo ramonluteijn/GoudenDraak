@@ -1,6 +1,7 @@
 <?php
 
 use App\Exports\ProductExport;
+use App\Exports\ReceiptExport;
 use App\Http\Controllers\Admin\OrderCrudController;
 use App\Http\Controllers\Admin\PageCrudController;
 use App\Http\Controllers\Admin\SalesSummaryCrudController;
@@ -44,6 +45,7 @@ Route::prefix('/export')->name('export.')->group(function () {
     Route::get('/summary/{id}', [SalesSummaryCrudController::class, 'export'])->name('summary');
     Route::get('/receipt/{id}', [OrderCrudController::class, 'export'])->name('receipt');
     Route::get('/products', [ProductExport::class, 'download'])->name('products');
+    Route::get('/receipt/confirmation/{id}', [OrderController::class, 'confirmationDownload'])->name('receipt.confirmation');
 });
 
 Route::prefix('/survey')->name('survey.')->group(function () {
@@ -54,6 +56,5 @@ Route::prefix('/survey')->name('survey.')->group(function () {
 
 Route::get('/discounts', [DiscountController::class, 'index'])->name('discounts.index');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-//Route::get('/destroy-session', [OrderController::class, 'destroySession'])->name('session.destroy');
 
 Route::get('/{parent}/{child?}/{grandchild?}', [PageController::class, 'index'])->name('custom.read'); //always last route
