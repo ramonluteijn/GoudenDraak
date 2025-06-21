@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\ReceiptExport;
 
-class ShoppingCartController extends Controller
+class ShoppingCartController
 {
     public function index()
     {

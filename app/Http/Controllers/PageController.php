@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\{Page};
 
-class PageController extends Controller
+class PageController
 {
     public function index($parent = null, $child = null, $grandchild = null)
     {

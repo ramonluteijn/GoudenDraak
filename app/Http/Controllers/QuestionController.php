@@ -6,7 +6,7 @@ use App\Models\Question;
 use App\Services\QuestionService;
 use Illuminate\Http\Request;
 
-class QuestionController extends Controller
+class QuestionController
 {
     private QuestionService $questionService;
     public function __construct(QuestionService $questionService)
