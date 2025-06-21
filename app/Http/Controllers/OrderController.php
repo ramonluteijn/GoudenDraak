@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ReceiptExport;
 use App\Models\Category;
-use App\Models\Product;
 use App\Services\OrderService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -41,7 +42,7 @@ class OrderController extends Controller
             session(['order_id' => $this->orderService->getOrder()->id]);
         }
 
-        return view('orders.shop', [
+        return view('shoppingcart.shop', [
             'order' => $this->orderService->getOrder(),
             'categories' => $categories,
         ]);
@@ -63,14 +64,14 @@ class OrderController extends Controller
         ]);
     }
 
-    public function createEmptyOrder(): \Illuminate\Http\RedirectResponse
+    public function createEmptyOrder(): RedirectResponse
     {
         $this->orderService->createEmptyOrder();
         session(['order_id' => $this->orderService->getOrder()->id]);
         return to_route('shop.index');
     }
 
-    public function addToCart(int $productId): \Illuminate\Http\RedirectResponse
+    public function addToCart(int $productId): RedirectResponse
     {
         $orderId = session('order_id');
         if ($orderId) {
@@ -80,7 +81,7 @@ class OrderController extends Controller
         return to_route('shop.index');
     }
 
-    public function removeFromCart(int $productId): \Illuminate\Http\RedirectResponse
+    public function removeFromCart(int $productId): RedirectResponse
     {
         $orderId = session('order_id');
         if ($orderId) {
@@ -90,8 +91,8 @@ class OrderController extends Controller
         return to_route('shop.index');
     }
 
-    public function destroySession(){
-        session()->forget('order_id');
-        return redirect()->back()->with('status', 'Winkelwagen geleegd.');
+    public function confirmationDownload(int $id)
+    {
+        return (new ReceiptExport($id))->confirmationDownload($id);
     }
 }
