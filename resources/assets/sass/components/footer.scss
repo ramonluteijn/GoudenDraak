@@ -1,7 +1,13 @@
 footer {
     text-align: center;
-    a {
-        text-decoration: none;
-        color: yellow;
+    .links {
+        z-index: 10;
+        display: block;
+        position: relative;
+        margin-bottom: -25px;
+        a {
+            text-decoration: none;
+            color: yellow;
+        }
     }
 }

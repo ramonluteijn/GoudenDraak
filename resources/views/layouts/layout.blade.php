@@ -22,11 +22,16 @@
 
 <main>
     <x-blocks.top-banner />
-        @yield('main')
+    <div class="row-borders">
+        <x-blocks.borders.vertical-borders />
+        <div class="content">
+            @yield('main')
+        </div>
+        <x-blocks.borders.vertical-borders />
+    </div>
     <x-blocks.footer />
 
 </main>
-
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
