@@ -32,13 +32,14 @@
         display: flex;
         justify-content: center;
         gap: 3px;
-        a {
+        a, form button {
             color: #FFFFFF;
             font-size: 20px;
             text-decoration: none;
             background: linear-gradient(to bottom, #00fbff, #0095ff, #0027ff);
             padding: 0 20px;
             outline: 1px solid #000000;
+            border: none;
         }
     }
 }

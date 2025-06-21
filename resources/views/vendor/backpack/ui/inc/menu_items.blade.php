@@ -5,6 +5,7 @@
     <x-backpack::menu-dropdown-item title="Orders" icon="la la-question" :link="backpack_url('order')" />
     <x-backpack::menu-dropdown-item title="Producten" icon="la la-question" :link="backpack_url('product')" />
     <x-backpack::menu-dropdown-item title="Categorieën" icon="la la-question" :link="backpack_url('category')" />
+    <x-backpack::menu-dropdown-item title="Aanbiedingen" icon="la la-question" :link="backpack_url('discount')" />
 </x-backpack::menu-dropdown>
 
 <x-backpack::menu-dropdown title="Site instellingen" icon="la la-puzzle-piece">
@@ -12,8 +13,8 @@
     <x-backpack::menu-dropdown-item title="Pagina's" icon="la la-question" :link="backpack_url('page')" />
     <x-backpack::menu-dropdown-item title="Vragen" icon="la la-question" :link="backpack_url('question')" />
     <x-backpack::menu-dropdown-item title="Tafels" icon="la la-question" :link="backpack_url('table')" />
-    <x-backpack::menu-dropdown-item title="Discounts" icon="la la-question" :link="backpack_url('discount')" />
+
 </x-backpack::menu-dropdown>
 
-<x-backpack::menu-item title="Sales summaries" icon="la la-question" :link="backpack_url('sales-summary')" />
+<x-backpack::menu-item title="Verkoopoverzichten" icon="la la-question" :link="backpack_url('sales-summary')" />
 

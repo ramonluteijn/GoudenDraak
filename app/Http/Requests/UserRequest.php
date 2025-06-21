@@ -25,7 +25,6 @@ class UserRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|string|in:user,business_advertiser,private_advertiser',
         ];
     }
 
@@ -49,9 +48,6 @@ class UserRequest extends FormRequest
             'password.string' => __('Password must be a string'),
             'password.min' => __('Password must be at least 8 characters'),
             'password.confirmed' => __('Passwords do not match'),
-            'role.required' => __('Role is required'),
-            'role.string' => __('Role must be a string'),
-            'role.in' => __('Role must be user, business_advertiser, or private_advertiser'),
         ];
     }
 }
