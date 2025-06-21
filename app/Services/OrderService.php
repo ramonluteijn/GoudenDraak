@@ -32,15 +32,7 @@ class OrderService
         $this->ensureOrderInitialized();
         $existing = $this->order->products()->where('product_id', $productId)->first();
 
-        $product = \App\Models\Product::with(['discounts' => function ($query) {
-            $query->where('start_date', '<=', now())
-                ->where('end_date', '>=', now());
-        }])->find($productId);
-
-        $activeDiscount = $product->discounts->sortByDesc('discount')->first();
-        $unitPrice = $activeDiscount
-            ? round($product->price * (1 - $activeDiscount->discount / 100), 2)
-            : $product->price;
+        $unitPrice = $this->getUnitPrice($productId);
 
         if ($existing) {
             $this->updateProductQuantity($productId, $existing->pivot->quantity + $quantity);
@@ -67,15 +59,7 @@ class OrderService
             } else {
                 $price = $existing->pivot->price;
                 if ($price === null) {
-                    $product = \App\Models\Product::with(['discounts' => function ($query) {
-                        $query->where('start_date', '<=', now())
-                            ->where('end_date', '>=', now());
-                    }])->find($productId);
-
-                    $activeDiscount = $product->discounts->sortByDesc('discount')->first();
-                    $price = $activeDiscount
-                        ? round($product->price * (1 - $activeDiscount->discount / 100), 2)
-                        : $product->price;
+                    $price = $this->getUnitPrice($productId);
                 }
                 $this->order->products()->updateExistingPivot($productId, [
                     'quantity' => $newQuantity,
@@ -91,15 +75,7 @@ class OrderService
     {
         $this->ensureOrderInitialized();
 
-        $product = \App\Models\Product::with(['discounts' => function ($query) {
-            $query->where('start_date', '<=', now())
-                ->where('end_date', '>=', now());
-        }])->find($productId);
-
-        $activeDiscount = $product->discounts->sortByDesc('discount')->first();
-        $unitPrice = $activeDiscount
-            ? round($product->price * (1 - $activeDiscount->discount / 100), 2)
-            : $product->price;
+        $unitPrice = $this->getUnitPrice($productId);
 
         if ($quantity <= 0) {
             $this->order->products()->detach($productId);
@@ -132,5 +108,23 @@ class OrderService
     public function loadOrder($orderId)
     {
         $this->order = Order::findOrFail($orderId);
+    }
+
+    /**
+     * @param $productId
+     * @return float|\Illuminate\Support\HigherOrderCollectionProxy|mixed
+     */
+    public function getUnitPrice($productId): mixed
+    {
+        $product = \App\Models\Product::with(['discounts' => function ($query) {
+            $query->where('start_date', '<=', now())
+                ->where('end_date', '>=', now());
+        }])->find($productId);
+
+        $activeDiscount = $product->discounts->sortByDesc('discount')->first();
+        $unitPrice = $activeDiscount
+            ? round($product->price * (1 - $activeDiscount->discount / 100), 2)
+            : $product->price;
+        return $unitPrice;
     }
 }

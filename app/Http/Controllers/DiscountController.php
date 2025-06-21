@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\{Discount};
 
-class DiscountController extends Controller
+class DiscountController
 {
     public function index()
     {

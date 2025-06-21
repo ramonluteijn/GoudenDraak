@@ -30,6 +30,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::get('/pages/{id}', [PageCrudController::class, 'delete'])->name('pages.delete');
+    Route::get('admin/dashboard', [\App\Http\Controllers\Admin\ProgressController::class, 'index']);
 
     Route::prefix('/shop')->name('shop.')->group(function () {
         Route::get('/', [OrderController::class, 'index'])->name('index');

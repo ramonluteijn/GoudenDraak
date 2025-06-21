@@ -9,7 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
-class OrderController extends Controller
+class OrderController
 {
     private OrderService $orderService;
 
