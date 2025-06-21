@@ -17,6 +17,7 @@
             </div>
         </div>
     </div>
+    <x-blocks.borders.horizontal-borders />
 </div>
 
 <script setup>
