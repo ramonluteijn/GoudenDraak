@@ -90,7 +90,8 @@ class PageCrudController extends CrudController
 
     private function setupFields()
     {
-        if(CRUD::getCurrentEntry() && CRUD::getCurrentEntry()->url === 'home' || CRUD::getCurrentEntry() && CRUD::getCurrentEntry()->url === 'news' || CRUD::getCurrentEntry() && CRUD::getCurrentEntry()->url === 'contact') {
+        if (in_array(CRUD::getCurrentEntry()->url ?? '', ['home', 'news', 'contact'])) {
+            CRUD::field('title')->label('Pagina Titel')->type('text')->attributes(['readonly' => 'readonly']);
             CRUD::field('title')->label('Pagina Titel')->type('text')->attributes(['readonly' => 'readonly']);
             CRUD::field('url')->label('URL')->type('text')->attributes(['readonly' => 'readonly']);
         }
