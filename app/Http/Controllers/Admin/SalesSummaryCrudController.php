@@ -31,7 +31,7 @@ class SalesSummaryCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\SalesSummary::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/sales-summary');
-        CRUD::setEntityNameStrings('sales summary', 'sales summaries');
+        CRUD::setEntityNameStrings('verkoopoverzicht', 'verkoopoverzichten');
         CRUD::denyAccess(['create', 'update', 'delete']);
     }
 
