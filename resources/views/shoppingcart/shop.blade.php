@@ -1,5 +1,7 @@
 @extends('layouts.default')
 
+@section('title', 'Bestellen')
+
 @section('content')
 
     @foreach($categories as $category)
@@ -40,7 +42,7 @@
         </div>
     @endforeach
 
-    <p><a href="{{ route('session.destroy') }}">Klik hier om je bestelling af te ronden</a></p>
+    <p><a href="{{ route('shop.shoppingcart.confirmation') }}">Klik hier om je bestelling af te ronden</a></p>
 
 @endsection
 

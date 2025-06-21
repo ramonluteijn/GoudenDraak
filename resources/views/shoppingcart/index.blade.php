@@ -1,5 +1,7 @@
 @extends('layouts.default')
 
+@section('title', 'Bestellen')
+
 @section('content')
     <h1>Shopping Cart</h1>
     <div class="shopping-cart">

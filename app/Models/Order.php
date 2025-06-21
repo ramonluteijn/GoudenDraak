@@ -87,7 +87,7 @@ class Order extends Model
 
     public function export()
     {
-        return '<a class="btn btn-sm btn-link" href="'.route('export-receipt', $this->id).'"><i class="la la-file-excel-o"></i> Exporteren</a>';
+        return '<a class="btn btn-sm btn-link" href="'.route('export.receipt', $this->id).'"><i class="la la-file-excel-o"></i> Exporteren</a>';
     }
 
     /*

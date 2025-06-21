@@ -8,4 +8,10 @@ class ShoppingCartController extends Controller
     {
         return view('shoppingcart.index');
     }
+
+    public function confirmation()
+    {
+        session()->forget('order_id');
+        return view('shoppingcart.confirmation');
+    }
 }

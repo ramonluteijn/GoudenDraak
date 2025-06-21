@@ -41,7 +41,7 @@ class OrderController extends Controller
             session(['order_id' => $this->orderService->getOrder()->id]);
         }
 
-        return view('orders.shop', [
+        return view('shoppingcart.shop', [
             'order' => $this->orderService->getOrder(),
             'categories' => $categories,
         ]);
