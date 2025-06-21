@@ -25,7 +25,7 @@ class AuthController
     public function logout(): RedirectResponse
     {
         Auth::logout();
-        return to_route('login.show');
+        return to_route('login');
     }
 
     public function login(Request $request): RedirectResponse

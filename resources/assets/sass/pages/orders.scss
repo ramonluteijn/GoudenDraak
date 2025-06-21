@@ -4,3 +4,46 @@
         text-align: left;
     }
 }
+
+.category-section {
+    margin-bottom: 2rem;
+}
+
+.category-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.shop {
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1rem;
+    }
+
+    th, td {
+        padding: 0.75rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    th {
+        background: #f8f8f8;
+        text-align: left;
+    }
+
+    tr.product-row {
+        cursor: pointer;
+        transition: background 0.2s;
+        text-align: left
+    }
+
+    tr.product-row:hover {
+        background: #f0f4ff;
+    }
+
+    a.product-link {
+        color: inherit;
+        text-decoration: none;
+        display: contents;
+    }
+}

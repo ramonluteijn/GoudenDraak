@@ -111,7 +111,8 @@ class SalesSummaryCrudController extends CrudController
                         return [
                             'quantity' => $details->sum('quantity'),
                             'total_price' => $details->sum(function ($detail) {
-                                return $detail->product ? $detail->product->price * $detail->quantity : 0;
+                                if (!$detail->product) return 0;
+                                return $detail->quantity * $detail->price;
                             }),
                         ];
                     });
@@ -119,11 +120,10 @@ class SalesSummaryCrudController extends CrudController
                 $value = $productsSold->map(function ($data, $productId) {
                     $product = \App\Models\Product::find($productId);
                     if ($product) {
-                        return "<span>{$product->name} - Aantal: {$data['quantity']} - Totaalprijs: €{$data['total_price']}</span><br>";
+                        return "<span>{$product->name} - Aantal: {$data['quantity']} - Totaalprijs: €" . number_format($data['total_price'], 2) . "</span><br>";
                     }
-                    return "<span>Product ID {$productId} - Aantal: {$data['quantity']} - Totaalprijs: €{$data['total_price']}</span><br>";
+                    return "<span>Product ID {$productId} - Aantal: {$data['quantity']} - Totaalprijs: €" . number_format($data['total_price'], 2) . "</span><br>";
                 })->implode(' ');
-
                 return $value;
             },
         ]);

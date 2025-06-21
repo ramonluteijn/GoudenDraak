@@ -40,7 +40,7 @@ class SalesSummary extends Model
 
     public function export()
     {
-        return '<a class="btn btn-sm btn-link" href="'.route('export-summary', $this->id).'"><i class="la la-file-excel-o"></i> Export</a>';
+        return '<a class="btn btn-sm btn-link" href="'.route('export.summary', $this->id).'"><i class="la la-file-excel-o"></i> Export</a>';
     }
 
     /*

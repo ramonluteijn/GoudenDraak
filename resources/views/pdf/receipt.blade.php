@@ -28,8 +28,8 @@
     <thead>
     <tr>
         <th>Naam</th>
-        <th>€ PP</th>
         <th>Aantal</th>
+        <th>€ PP</th>
         <th>€ Totaal</th>
     </tr>
     </thead>
@@ -37,9 +37,9 @@
     @foreach($order->orderDetails as $detail)
         <tr>
             <td>{{ $detail->product->name }}</td>
-            <td>{{ number_format($detail->product->price, 2) }}</td>
             <td>{{ $detail->quantity }}</td>
-            <td>{{ number_format($detail->product->price * $detail->quantity, 2) }}</td>
+            <td>€{{ number_format($detail->price, 2) }}</td>
+            <td>€{{ number_format($detail->price * $detail->quantity, 2) }}</td>
         </tr>
     @endforeach
     </tbody>

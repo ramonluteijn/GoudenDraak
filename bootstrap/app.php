@@ -26,12 +26,11 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withSchedule(function (Schedule $schedule) {
         $schedule->command('app:create-sales-summary')->everyMinute();
+        $schedule->command('app:delete-empty-orders')->hourly();
+        $schedule->command('app:delete-empty-sales-summaries')->daily();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (NotFoundHttpException $e) {
-            return redirect()->route('home.index');
-        });
-        $exceptions->render(function (RouteNotFoundException $e) {
-            return response()->json(['error' => 'Route not found'], 404);
+            return redirect()->route('home');
         });
     })->create();
