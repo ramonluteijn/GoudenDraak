@@ -28,4 +28,17 @@
     .title {
         font-size: 50px;
     }
+    .buttons-wrapper {
+        display: flex;
+        justify-content: center;
+        gap: 3px;
+        a {
+            color: #FFFFFF;
+            font-size: 20px;
+            text-decoration: none;
+            background: linear-gradient(to bottom, #00fbff, #0095ff, #0027ff);
+            padding: 0 20px;
+            outline: 1px solid #000000;
+        }
+    }
 }
