@@ -24,7 +24,7 @@
                                 <td>{{ $product['id'] }}</td>
                                 <td>
                                     <a class="product-link" href="{{ route('shop.addtocart', ['id' => $product['id']]) }}">
-                                        {{ $product['name'] }}
+                                        {!! $product['name'] !!}
                                     </a>
                                 </td>
                                 <td>{!! $product['description'] !!}</td>
